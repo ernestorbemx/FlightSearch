@@ -58,7 +58,7 @@ public class AmadeusService {
                         uriBuilder.path("/v1/reference-data/locations")
                                 .queryParam("subType", search.getSubtype())
                                 .queryParam("keyword", search.getKeyword())
-                                .queryParam("page[limit]", search.getPage())
+                                .queryParam("page[limit]", search.getPageSize())
                                 .queryParam("page[offset]", search.getOffset())
                                 .queryParam("sort", "analytics.travelers.score")
                                 .build()
@@ -104,7 +104,7 @@ public class AmadeusService {
                 });
     }
 
-    public List<LocationResponseDto> getAirportsWithRotation(AirportSearchDto dto) {
+    public List<LocationResponseDto>    getAirportsWithRotation(AirportSearchDto dto) {
         return getAirports(dto)
                 .onErrorResume(WebClientResponseException.class, e -> {
                     if (e.getStatusCode() == HttpStatus.FORBIDDEN) {
