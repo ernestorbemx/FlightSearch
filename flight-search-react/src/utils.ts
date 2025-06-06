@@ -1,1 +1,1 @@
-export const currencies = ["USD", "MXN", "EUR"]
+export const currencies = ["USD", "MXN", "EUR"];

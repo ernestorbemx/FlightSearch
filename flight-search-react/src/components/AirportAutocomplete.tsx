@@ -1,7 +1,7 @@
 import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import { useAsyncList } from "@react-stately/data";
 import type { Airport } from "../types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 export interface AirportAutoCompleteProps {
@@ -20,14 +20,13 @@ export function AirportAutoComplete({
   errorMessage,
 }: AirportAutoCompleteProps) {
   const [internalValue, setInternalValue] = useState<string | null>(
-    value ?? null
+    value ?? null,
   );
   const [text, setText] = useState<string>();
 
   useEffect(() => {
     setInternalValue(value ?? null);
   }, [value]);
-
 
   const list = useAsyncList<Airport>({
     async load({ signal, filterText }) {
@@ -39,7 +38,7 @@ export function AirportAutoComplete({
 
       const res = await fetch(
         `http://127.0.0.1:8080/airports?keyword=${filterText}&subtype=AIRPORT&pageSize=10&offset=0`,
-        { signal }
+        { signal },
       );
       const json = await res.json();
 
@@ -63,7 +62,7 @@ export function AirportAutoComplete({
         setInternalValue(key as string);
         onChange?.(key as string);
         setText(
-          (t) => list.items.find((i) => i.iataCode == key)?.iataCode ?? t
+          (t) => list.items.find((i) => i.iataCode == key)?.iataCode ?? t,
         );
       }}
       className="max-w-xs"
