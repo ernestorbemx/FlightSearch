@@ -69,7 +69,21 @@ public class AmadeusService {
                 });
     }
 
-    public Mono<AmadeusResponse<List<FlightOffer>>> getOffers(FlightSearchDto search) {
+    public Mono<AmadeusResponse<LocationResponseDto>> getAirport(String id) {
+
+        return client
+                .get()
+                .uri(uriBuilder ->
+                        uriBuilder.path("/v1/reference-data/locations/" + id)
+                                .build()
+                )
+                .headers(h -> h.setBearerAuth(getAccessToken()))
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<AmadeusResponse<LocationResponseDto>>() {
+                });
+    }
+
+    public Mono<AmadeusResponseDictionary<List<FlightOffer>>> getOffers(FlightSearchDto search) {
 
         return client
                 .get()
@@ -85,7 +99,7 @@ public class AmadeusService {
                 )
                 .headers(h -> h.setBearerAuth(getAccessToken()))
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<AmadeusResponse<List<FlightOffer>>>() {
+                .bodyToMono(new ParameterizedTypeReference<AmadeusResponseDictionary<List<FlightOffer>>>() {
                 });
     }
 
@@ -107,8 +121,8 @@ public class AmadeusService {
     public List<LocationResponseDto>    getAirportsWithRotation(AirportSearchDto dto) {
         return getAirports(dto)
                 .onErrorResume(WebClientResponseException.class, e -> {
-                    if (e.getStatusCode() == HttpStatus.FORBIDDEN) {
-                        return generateAccessToken().flatMap(r -> getAirports(dto));
+                    if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                        return generateAccessToken().map(accessTokenResponse -> accessToken = accessTokenResponse.getAccessToken()).flatMap(r -> getAirports(dto));
                     }
                     return Mono.error(e);
                 })
@@ -117,23 +131,35 @@ public class AmadeusService {
 
     }
 
-    public List<FlightOffer> getOffersWithRotation(FlightSearchDto dto) {
-        return getOffers(dto)
+    public LocationResponseDto    getAirportWithRotation(String id) {
+        return getAirport(id)
                 .onErrorResume(WebClientResponseException.class, e -> {
-                    if (e.getStatusCode() == HttpStatus.FORBIDDEN) {
-                        return generateAccessToken().flatMap(r -> getOffers(dto));
+                    if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                        return generateAccessToken().map(accessTokenResponse -> accessToken = accessTokenResponse.getAccessToken()).flatMap(r -> getAirport(id));
                     }
                     return Mono.error(e);
                 })
                 .block()
                 .getData();
+
+    }
+
+    public AmadeusResponseDictionary<List<FlightOffer>> getOffersWithRotation(FlightSearchDto dto) {
+        return getOffers(dto)
+                .onErrorResume(WebClientResponseException.class, e -> {
+                    if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                        return generateAccessToken().map(accessTokenResponse -> accessToken = accessTokenResponse.getAccessToken()).flatMap(r -> getOffers(dto));
+                    }
+                    return Mono.error(e);
+                })
+                .block();
     }
 
     public List<Airline> getAirlineWithRotation(String dto) {
         return getAirline(dto)
                 .onErrorResume(WebClientResponseException.class, e -> {
-                    if (e.getStatusCode() == HttpStatus.FORBIDDEN) {
-                        return generateAccessToken().flatMap(r -> getAirline(dto));
+                    if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                        return generateAccessToken().map(accessTokenResponse -> accessToken = accessTokenResponse.getAccessToken()).flatMap(r -> getAirline(dto));
                     }
                     return Mono.error(e);
                 })

@@ -4,12 +4,12 @@ import com.encora.ernesto.ramirez.flight_search.dtos.*;
 import com.encora.ernesto.ramirez.flight_search.services.AmadeusService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequestMapping("/")
+@CrossOrigin(origins = {"http://localhost:8080", "http://127.0.0.1:8080", "http://127.0.0.1:5173", "http://localhost:5173"})
 @RestController
 public class AppController {
 
@@ -17,12 +17,17 @@ public class AppController {
     private AmadeusService service;
 
     @GetMapping("airports")
-    public List<LocationResponseDto> getAirport(@Valid @ModelAttribute AirportSearchDto dto) {
+    public List<LocationResponseDto> getAirports(@Valid @ModelAttribute AirportSearchDto dto) {
         return service.getAirportsWithRotation(dto);
     }
 
+    @GetMapping("airports/{id}")
+    public LocationResponseDto getAirport(@Valid @PathVariable("id") String id) {
+        return service.getAirportWithRotation(id);
+    }
+
     @GetMapping("flights")
-    public List<FlightOffer> getOffers(@Valid @ModelAttribute FlightSearchDto dto) {
+    public AmadeusResponseDictionary<List<FlightOffer>> getOffers(@Valid @ModelAttribute FlightSearchDto dto) {
         return service.getOffersWithRotation(dto);
     }
 
