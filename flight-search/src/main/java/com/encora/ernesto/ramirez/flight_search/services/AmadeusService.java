@@ -1,16 +1,27 @@
 package com.encora.ernesto.ramirez.flight_search.services;
 
 import com.encora.ernesto.ramirez.flight_search.configuration.AmadeusConfigProperties;
-import com.encora.ernesto.ramirez.flight_search.dtos.*;
+import com.encora.ernesto.ramirez.flight_search.dtos.amadeus.Amadeus400Error;
+import com.encora.ernesto.ramirez.flight_search.dtos.amadeus.AmadeusResponse;
+import com.encora.ernesto.ramirez.flight_search.dtos.amadeus.AmadeusResponseDictionary;
+import com.encora.ernesto.ramirez.flight_search.dtos.amadeus.endpoints.Airline;
+import com.encora.ernesto.ramirez.flight_search.dtos.amadeus.endpoints.FlightOffer;
+import com.encora.ernesto.ramirez.flight_search.dtos.body.AirportSearchDto;
+import com.encora.ernesto.ramirez.flight_search.dtos.body.FlightSearchDto;
+import com.encora.ernesto.ramirez.flight_search.dtos.responses.AccessTokenResponse;
+import com.encora.ernesto.ramirez.flight_search.dtos.responses.LocationResponseDto;
+import com.encora.ernesto.ramirez.flight_search.exceptions.AmadeusBadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -65,6 +76,10 @@ public class AmadeusService {
                 )
                 .headers(h -> h.setBearerAuth(getAccessToken()))
                 .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        clientResponse -> clientResponse.bodyToMono(Amadeus400Error.class)
+                                .map(body -> new AmadeusBadRequestException("API returned 4xx error: ", body.getErrors())
+                                ))
                 .bodyToMono(new ParameterizedTypeReference<AmadeusResponse<List<LocationResponseDto>>>() {
                 });
     }
@@ -79,6 +94,10 @@ public class AmadeusService {
                 )
                 .headers(h -> h.setBearerAuth(getAccessToken()))
                 .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        clientResponse -> clientResponse.bodyToMono(Amadeus400Error.class)
+                                .map(body -> new AmadeusBadRequestException("API returned 4xx error: ", body.getErrors())
+                                ))
                 .bodyToMono(new ParameterizedTypeReference<AmadeusResponse<LocationResponseDto>>() {
                 });
     }
@@ -88,17 +107,29 @@ public class AmadeusService {
         return client
                 .get()
                 .uri(uriBuilder ->
-                        uriBuilder.path("/v2/shopping/flight-offers")
-                                .queryParam("originLocationCode", search.getDepartureAirport())
-                                .queryParam("destinationLocationCode", search.getArrivalAirport())
-                                .queryParam("departureDate", search.getDepartureDate())
-                                .queryParam("returnDate", search.getReturnDate())
-                                .queryParam("adults", search.getNumberAdults())
-                                .queryParam("max", 20)
-                                .build()
+                        {
+                            UriBuilder builder =
+                                    uriBuilder.path("/v2/shopping/flight-offers")
+                                            .queryParam("originLocationCode", search.getDepartureAirport())
+                                            .queryParam("destinationLocationCode", search.getArrivalAirport())
+                                            .queryParam("departureDate", search.getDepartureDate())
+                                            .queryParam("adults", search.getNumberAdults())
+                                            .queryParam("max", 20);
+
+                            if (search.getReturnDate() == null) {
+                                return builder.build();
+                            }
+                            return builder
+                                    .queryParam("returnDate", search.getReturnDate())
+                                    .build();
+                        }
                 )
                 .headers(h -> h.setBearerAuth(getAccessToken()))
                 .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        clientResponse -> clientResponse.bodyToMono(Amadeus400Error.class)
+                                .map(body -> new AmadeusBadRequestException("API returned 4xx error: ", body.getErrors())
+                                ))
                 .bodyToMono(new ParameterizedTypeReference<AmadeusResponseDictionary<List<FlightOffer>>>() {
                 });
     }
@@ -118,7 +149,7 @@ public class AmadeusService {
                 });
     }
 
-    public List<LocationResponseDto>    getAirportsWithRotation(AirportSearchDto dto) {
+    public List<LocationResponseDto> getAirportsWithRotation(AirportSearchDto dto) {
         return getAirports(dto)
                 .onErrorResume(WebClientResponseException.class, e -> {
                     if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
@@ -131,7 +162,7 @@ public class AmadeusService {
 
     }
 
-    public LocationResponseDto    getAirportWithRotation(String id) {
+    public LocationResponseDto getAirportWithRotation(String id) {
         return getAirport(id)
                 .onErrorResume(WebClientResponseException.class, e -> {
                     if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
@@ -166,8 +197,6 @@ public class AmadeusService {
                 .block()
                 .getData();
     }
-
-
 
 
 }

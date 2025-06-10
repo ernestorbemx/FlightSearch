@@ -1,6 +1,11 @@
 package com.encora.ernesto.ramirez.flight_search.controllers;
 
-import com.encora.ernesto.ramirez.flight_search.dtos.*;
+import com.encora.ernesto.ramirez.flight_search.dtos.amadeus.AmadeusResponseDictionary;
+import com.encora.ernesto.ramirez.flight_search.dtos.amadeus.endpoints.Airline;
+import com.encora.ernesto.ramirez.flight_search.dtos.amadeus.endpoints.FlightOffer;
+import com.encora.ernesto.ramirez.flight_search.dtos.body.AirportSearchDto;
+import com.encora.ernesto.ramirez.flight_search.dtos.body.FlightSearchDto;
+import com.encora.ernesto.ramirez.flight_search.dtos.responses.LocationResponseDto;
 import com.encora.ernesto.ramirez.flight_search.services.AmadeusService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

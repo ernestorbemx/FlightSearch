@@ -1,6 +1,5 @@
-package com.encora.ernesto.ramirez.flight_search.dtos;
+package com.encora.ernesto.ramirez.flight_search.dtos.amadeus.endpoints;
 
-import java.util.List;
 import java.util.Map;
 
 public class Dictionaries {

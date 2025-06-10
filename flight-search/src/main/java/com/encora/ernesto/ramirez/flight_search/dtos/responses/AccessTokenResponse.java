@@ -1,4 +1,4 @@
-package com.encora.ernesto.ramirez.flight_search.dtos;
+package com.encora.ernesto.ramirez.flight_search.dtos.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

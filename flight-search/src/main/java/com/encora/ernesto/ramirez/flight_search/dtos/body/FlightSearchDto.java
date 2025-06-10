@@ -1,16 +1,27 @@
-package com.encora.ernesto.ramirez.flight_search.dtos;
+package com.encora.ernesto.ramirez.flight_search.dtos.body;
+
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 public class FlightSearchDto {
 
+    @NotBlank
+    @NotEmpty
     private String departureAirport;
-
+    @NotBlank
+    @NotEmpty
     private String arrivalAirport;
+    @NotNull
     private LocalDate departureDate;
     private LocalDate returnDate;
+    @NotEmpty
     private String currency;
+    @NotNull
+    @Min(1)
+    @Max(10)
     private int numberAdults;
+    @NotNull
     private boolean nonStop;
 
     public String getDepartureAirport() {
@@ -67,5 +78,18 @@ public class FlightSearchDto {
 
     public void setNonStop(boolean nonStop) {
         this.nonStop = nonStop;
+    }
+
+    @Override
+    public String toString() {
+        return "FlightSearchDto{" +
+                "departureAirport='" + departureAirport + '\'' +
+                ", arrivalAirport='" + arrivalAirport + '\'' +
+                ", departureDate=" + departureDate +
+                ", returnDate=" + returnDate +
+                ", currency='" + currency + '\'' +
+                ", numberAdults=" + numberAdults +
+                ", nonStop=" + nonStop +
+                '}';
     }
 }

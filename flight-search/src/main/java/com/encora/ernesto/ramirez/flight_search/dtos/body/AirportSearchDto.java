@@ -1,4 +1,4 @@
-package com.encora.ernesto.ramirez.flight_search.dtos;
+package com.encora.ernesto.ramirez.flight_search.dtos.body;
 
 public class AirportSearchDto {
     private String keyword; // City or airport name or code
@@ -36,5 +36,15 @@ public class AirportSearchDto {
 
     public void setOffset(int offset) {
         this.offset = offset;
+    }
+
+    @Override
+    public String toString() {
+        return "AirportSearchDto{" +
+                "keyword='" + keyword + '\'' +
+                ", subtype='" + subtype + '\'' +
+                ", pageSize=" + pageSize +
+                ", offset=" + offset +
+                '}';
     }
 }
