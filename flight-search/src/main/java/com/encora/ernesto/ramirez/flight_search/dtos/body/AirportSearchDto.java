@@ -1,9 +1,19 @@
 package com.encora.ernesto.ramirez.flight_search.dtos.body;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public class AirportSearchDto {
+    @NotEmpty
     private String keyword; // City or airport name or code
+    @NotEmpty
     private String subtype; // CITY or AIRPORT
+    @NotNull
+    @Min(1)
     private int pageSize;
+    @NotNull
+    @Min(0)
     private int offset;
 
     public String getKeyword() {
