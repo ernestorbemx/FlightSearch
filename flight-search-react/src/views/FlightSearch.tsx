@@ -7,19 +7,34 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Button, Checkbox, NumberInput, type DateValue } from "@heroui/react";
+import { getLocalTimeZone, today } from "@internationalized/date";
+import { useNavigate } from "react-router";
 
 const schema = yup
   .object({
     departure: yup.string().required(),
-    arrival: yup.string().optional(),
+    arrival: yup.string().required(),
     currency: yup.string().required(),
-    departureDate: yup.object().required(),
-    arrivalDate: yup.object().nullable().optional(),
-    numberAdults: yup.number().min(1).max(10).required(),
+    departureDate: yup.object<DateValue>().required(),
+    arrivalDate: yup.object<DateValue>().nullable().optional(),
+    numberAdults: yup.number().min(1).max(9).required(),
     nonStop: yup.boolean().required(),
   })
   .required();
+
+export interface FlightSearchParams {
+  departure: string;
+  arrival: string;
+  currency: string;
+  departureDate: DateValue;
+  arrivalDate?: DateValue;
+  numberAdults: number;
+  nonStop: boolean;
+}
+
 export function FlightSearch() {
+  const navigate = useNavigate();
+
   const {
     control,
     handleSubmit,
@@ -83,7 +98,8 @@ export function FlightSearch() {
               value={value as DateValue}
               onChange={onChange}
               onBlur={onBlur}
-              maxValue={maxDate}
+              minValue={today(getLocalTimeZone())}
+              maxValue={maxDate as DateValue}
               isInvalid={!!errors.departureDate}
               errorMessage="Select a date"
             />
@@ -181,8 +197,18 @@ export function FlightSearch() {
           </Button>
           <Button
             color="primary"
+            /// @ts-expect-error handleSubmit expects to recieve a SyntheticEvent
             onPress={handleSubmit((data) => {
-              console.log(data);
+              const params = new URLSearchParams({
+                departure: data.departure,
+                arrival: data.arrival,
+                currency: data.currency,
+                departureDate: (data.departureDate as DateValue).toString(),
+                arrivalDate: (data.arrivalDate as DateValue)?.toString(),
+                numberAdults: String(data.numberAdults),
+                nonStop: String(data.nonStop),
+              });
+              navigate(`/search?${params.toString()}`);
             })}
           >
             Search

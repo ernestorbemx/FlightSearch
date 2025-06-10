@@ -1,10 +1,11 @@
 import "./App.css";
 import { HeroUIProvider } from "@heroui/react";
-import { FlightSearch } from "./views/FlightSearch";
+import { FlightOffers } from "./views/FlightOffers";
 function App() {
   return (
     <HeroUIProvider>
-      <FlightSearch></FlightSearch>
+      {/* <FlightSearch></FlightSearch> */}
+      <FlightOffers></FlightOffers>
     </HeroUIProvider>
   );
 }
