@@ -19,7 +19,7 @@ public class FlightSearchDto {
     private String currency;
     @NotNull
     @Min(1)
-    @Max(10)
+    @Max(9)
     private int numberAdults;
     @NotNull
     private boolean nonStop;
