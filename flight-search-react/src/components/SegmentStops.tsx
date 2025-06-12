@@ -13,10 +13,10 @@ export function SegmentStops({ data, dictionaries }: Props) {
 
   return (
     <div>
-      {data.stops.map((s) => (
+      {data.stops.map((s, ix) => (
         <span>
-          {formatISODuration(s.duration)}{" "}
-          {dictionaries.locations[s.iataCode].name} {s.iataCode}
+          Stop #{ix + 1}: Aiport {dictionaries.locations[s.iataCode]?.name}{" "}
+          {s.iataCode} {formatISODuration(s.duration)}{" "}
         </span>
       ))}
     </div>

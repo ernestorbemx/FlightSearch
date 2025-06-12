@@ -12,10 +12,10 @@ export function ItineraryStops({ data, dictionaries }: Props) {
       {data.segments
         .flatMap((s) => s.stops)
         .filter((s) => s != null)
-        .map((s) => (
+        .map((s, ix) => (
           <span>
-            {formatISODuration(s.duration)}{" "}
-            {dictionaries.locations[s.iataCode].name} {s.iataCode}
+            Stop #{ix + 1}: {formatISODuration(s.duration)} at
+            {dictionaries.locations[s.iataCode]?.name} {s.iataCode}
           </span>
         ))}
     </div>
