@@ -56,8 +56,18 @@ export interface Segments {
   departure: FlightEndpoint;
   arrival: FlightEndpoint;
   carrierCode: string;
+  operating: OperatingAircraft;
   stops: FlightStop[];
+  aircraft: Aircraft;
   number: number;
+}
+
+export interface OperatingAircraft {
+  carrierCode: string;
+}
+
+export interface Aircraft {
+  code: string;
 }
 
 export interface FlightEndpoint {
@@ -82,12 +92,20 @@ export interface TravelerPricing {
 
 export interface FareDetailsBySegment {
   segmentId: string;
-  cabing: string;
+  cabin: string;
   fareBasis: string;
   brandedFare: string;
-  bookingClass: string;
+  class: string;
   isAllotment: boolean;
-  includedCheckedBags: BaggageAllowance;
+  includedCheckedBags?: BaggageAllowance;
+  includedCabinBags?: BaggageAllowance;
+  amenities?: Amenity[];
+}
+
+export interface Amenity {
+  description: string;
+  isChargeable: boolean;
+  amenityType: string;
 }
 
 export interface BaggageAllowance {
