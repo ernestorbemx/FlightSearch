@@ -1,4 +1,4 @@
-import { formatDuration } from "date-fns";
+import { formatDuration, intervalToDuration } from "date-fns";
 import type { FlightOffer, Itineraries } from "./types";
 import { parse } from "tinyduration";
 import { Duration } from "luxon";
@@ -10,6 +10,14 @@ export function calculateCarriers(itinerary: Itineraries) {
     (s1, s2) => s1.add(s2.carrierCode),
     new Set<string>(),
   );
+}
+
+export function calculateOperatingCarriers(itinerary: Itineraries) {
+  return itinerary.segments
+    .filter(
+      (s) => s.operating != null && s.carrierCode != s.operating.carrierCode,
+    )
+    .reduce((s1, s2) => s1.add(s2.operating.carrierCode), new Set<string>());
 }
 
 export function calculateCarriersForOffer(data: FlightOffer) {
@@ -42,4 +50,12 @@ export function calculateOfferDuration(data: FlightOffer) {
       format: ["days", "hours", "minutes"],
     },
   );
+}
+
+export function formatDateDuration(start: string, end: string) {
+  const duration = intervalToDuration({
+    start: start,
+    end: end,
+  });
+  return formatDuration(duration);
 }

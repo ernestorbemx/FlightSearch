@@ -9,6 +9,7 @@ import { Button } from "@heroui/button";
 import { useSearchParams } from "react-router";
 import * as yup from "yup";
 import { Alert } from "@heroui/react";
+import { useFlightStore } from "../stores/flight-store";
 
 // const example: FlightOfferRequest = {
 //   currency: "USD",
@@ -37,6 +38,7 @@ const schema = yup
 export function FlightOffers() {
   const [searchParams] = useSearchParams();
   const [missingParams, setMissingParams] = useState(false);
+  const setDictionaries = useFlightStore((s) => s.setDictionaries);
   const [offers, setOffers] = useState<AmadeusResponseMeta<IFlightOffer[]>>();
 
   useEffect(() => {
@@ -63,17 +65,15 @@ export function FlightOffers() {
           .filter(([value]) => value != null)
           .map(([key, value]) => [key, String(value)]),
       ).toString();
-      console.log({ params });
       http
         .get<AmadeusResponseMeta<IFlightOffer[]>>(`/flights?${params}`)
         .then((res) => {
-          console.log({ data: res.data, params });
           setOffers(res.data);
+          setDictionaries(res.data.dictionaries);
         })
         .catch(() => {});
     } catch (e) {
       if (yup.ValidationError.isError(e)) {
-        console.log({ e });
         setMissingParams(true);
       }
     }

@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router";
 import { FlightSearch } from "./views/FlightSearch";
+import { FlightDetail } from "./views/FlightDetail";
 import { FlightOffers } from "./views/FlightOffers";
 
 const router = createBrowserRouter([
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
     path: "/search",
     Component: FlightOffers,
+  },
+  {
+    path: "/detail",
+    Component: FlightDetail,
   },
 ]);
 

@@ -3,15 +3,21 @@ import { type Dictionary, type FlightOffer as IFlightOffer } from "../types";
 import { FlightItinerary } from "./FlightItinerary";
 import { calculateCarriersForOffer } from "../utils";
 import { useEffect, useState } from "react";
+import { useFlightStore } from "../stores/flight-store";
+import { Button } from "@heroui/button";
+import { useNavigate } from "react-router";
 interface Props {
   data: IFlightOffer;
   dictionaries: Dictionary;
 }
 export function FlightOffer({ data, dictionaries }: Props) {
+  console.log({ data });
+  const navigate = useNavigate();
   //   const totalDuration = calculateOfferDuration(data);
   const [carriers, setCarriers] = useState<string[]>(
     Array.from(calculateCarriersForOffer(data)),
   );
+  const setFlight = useFlightStore((s) => s.setFlight);
 
   useEffect(() => {
     setCarriers(Array.from(calculateCarriersForOffer(data)));
@@ -52,6 +58,14 @@ export function FlightOffer({ data, dictionaries }: Props) {
                 data.travelerPricings[0].price.currency}{" "}
               per traveler
             </div>
+            <Button
+              onPress={() => {
+                setFlight(data);
+                navigate("/detail");
+              }}
+            >
+              See details
+            </Button>
           </div>
         </div>
       </CardBody>

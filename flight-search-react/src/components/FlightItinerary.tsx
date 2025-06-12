@@ -5,9 +5,11 @@ import { searchLocation } from "../http";
 import {
   calculateCarriers,
   calculateNoStops,
+  calculateOperatingCarriers,
   formatISODuration,
 } from "../utils";
 import { ItineraryStops } from "./ItineraryStops";
+import { DayOffset } from "./DayOffset";
 
 interface Props {
   data: Itineraries;
@@ -33,6 +35,7 @@ export function FlightItinerary({ data, dictionaries, showCarrier }: Props) {
   const lastSegment = data.segments[data.segments.length - 1];
 
   const carriers = calculateCarriers(data);
+  const operatingCarriers = calculateOperatingCarriers(data);
 
   const formattedDepartureAt = format(firstSegment.departure.at, "HH:mm");
   const formattedArrivalAt = format(lastSegment.arrival.at, "HH:mm");
@@ -50,9 +53,7 @@ export function FlightItinerary({ data, dictionaries, showCarrier }: Props) {
     <div>
       <div>
         {formattedDepartureAt} - {formattedArrivalAt}
-        {daysDiff > 0 && (
-          <span className="text-stone-500 text-xs">+{daysDiff} days</span>
-        )}
+        <DayOffset dayDifference={daysDiff} />
       </div>
       <div className="font-semibold">
         {departure?.name} ({departure?.iataCode}) - {arrival?.name} (
@@ -73,6 +74,11 @@ export function FlightItinerary({ data, dictionaries, showCarrier }: Props) {
             .filter(([key]) => carriers.has(key))
             .map(([key, name]) => `${name} (${key})`)
             .join(", ")}
+          {operatingCarriers.size > 0 &&
+            `(Operated by ${Object.entries(dictionaries.carriers)
+              .filter(([key]) => operatingCarriers.has(key))
+              .map(([key, name]) => `${name} (${key})`)
+              .join(", ")})`}
         </div>
       )}
     </div>
