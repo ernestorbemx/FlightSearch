@@ -15,14 +15,14 @@ public class FareDetailsBySegment {
     private boolean isAllotment;
     private BaggageAllowance includedCheckedBags;
     private BaggageAllowance includedCabinBags;
-    private List<Ammenity> ammenities;
+    private List<Amenity> amenities;
 
-    public List<Ammenity> getAmmenities() {
-        return ammenities;
+    public List<Amenity> getAmenities() {
+        return amenities;
     }
 
-    public void setAmmenities(List<Ammenity> ammenities) {
-        this.ammenities = ammenities;
+    public void setAmenities(List<Amenity> amenities) {
+        this.amenities = amenities;
     }
 
     public BaggageAllowance getIncludedCabinBags() {

@@ -1,6 +1,6 @@
 package com.encora.ernesto.ramirez.flight_search.dtos.amadeus.endpoints;
 
-public class Ammenity {
+public class Amenity {
 
     private String description;
     private boolean isChargeable;
