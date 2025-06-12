@@ -5,4 +5,28 @@ public class Ammenity {
     private String description;
     private boolean isChargeable;
     private String amenityType;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isChargeable() {
+        return isChargeable;
+    }
+
+    public void setChargeable(boolean chargeable) {
+        isChargeable = chargeable;
+    }
+
+    public String getAmenityType() {
+        return amenityType;
+    }
+
+    public void setAmenityType(String amenityType) {
+        this.amenityType = amenityType;
+    }
 }
