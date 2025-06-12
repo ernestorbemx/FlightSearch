@@ -2,6 +2,8 @@ package com.encora.ernesto.ramirez.flight_search.dtos.amadeus.endpoints;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class FareDetailsBySegment {
 
     private String segmentId;
@@ -12,6 +14,24 @@ public class FareDetailsBySegment {
     private String bookingClass;
     private boolean isAllotment;
     private BaggageAllowance includedCheckedBags;
+    private BaggageAllowance includedCabinBags;
+    private List<Ammenity> ammenities;
+
+    public List<Ammenity> getAmmenities() {
+        return ammenities;
+    }
+
+    public void setAmmenities(List<Ammenity> ammenities) {
+        this.ammenities = ammenities;
+    }
+
+    public BaggageAllowance getIncludedCabinBags() {
+        return includedCabinBags;
+    }
+
+    public void setIncludedCabinBags(BaggageAllowance includedCabinBags) {
+        this.includedCabinBags = includedCabinBags;
+    }
 
     public String getSegmentId() {
         return segmentId;
