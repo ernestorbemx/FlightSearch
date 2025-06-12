@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { http } from "../http";
 import {
-  type FlightOffer as IFlightOffer,
   type AmadeusResponseMeta,
+  type FlightOffer as IFlightOffer,
 } from "../types";
 import { FlightOffer } from "../components/FlightOffer";
 import { Button } from "@heroui/button";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import * as yup from "yup";
-import { Alert } from "@heroui/react";
+import { Alert, Select, SelectItem } from "@heroui/react";
 import { useFlightStore } from "../stores/flight-store";
+import { calculateOfferDuration } from "../utils";
 
 // const example: FlightOfferRequest = {
 //   currency: "USD",
@@ -28,19 +29,62 @@ const schema = yup
     departureAirport: yup.string().required(),
     arrivalAirport: yup.string().nullable(),
     currency: yup.string().required(),
-    returnDate: yup.string().matches(DATE_REGEX).required(),
+    returnDate: yup.string().matches(DATE_REGEX).nullable(),
     departureDate: yup.string().matches(DATE_REGEX).required(),
     numberAdults: yup.number().min(1).max(9).required(),
     nonStop: yup.boolean().required(),
   })
   .required();
 
+type Comparator = (a: IFlightOffer, b: IFlightOffer) => number;
+
+type SortingStrategy = {
+  label: string;
+  key: string;
+  sorter: Comparator;
+};
+
+const sortingStrategies: SortingStrategy[] = [
+  {
+    label: "Price (ascending)",
+    key: "price",
+    sorter(a, b) {
+      return a.price.grandTotal - b.price.grandTotal;
+    },
+  },
+  {
+    label: "Price (descending)",
+    key: "price2",
+    sorter(a, b) {
+      return b.price.grandTotal - a.price.grandTotal;
+    },
+  },
+  {
+    label: "Time (ascending)",
+    key: "time",
+    sorter(a, b) {
+      return calculateOfferDuration(a) - calculateOfferDuration(b);
+    },
+  },
+  {
+    label: "Time (descending)",
+    key: "time2",
+    sorter(a, b) {
+      return calculateOfferDuration(b) - calculateOfferDuration(a);
+    },
+  },
+];
+
 export function FlightOffers() {
   const [searchParams] = useSearchParams();
+  const [sorting, setSorting] = useState<SortingStrategy>(sortingStrategies[0]);
   const [missingParams, setMissingParams] = useState(false);
   const setDictionaries = useFlightStore((s) => s.setDictionaries);
   const [offers, setOffers] = useState<AmadeusResponseMeta<IFlightOffer[]>>();
-
+  const sortedOffers = useMemo(
+    () => offers?.data.map((item) => item).sort(sorting.sorter) ?? [],
+    [offers, sorting],
+  );
   useEffect(() => {
     const nonStop = searchParams.get("nonStop");
     const numberAdults = searchParams.get("numberAdults");
@@ -62,7 +106,7 @@ export function FlightOffers() {
       });
       const params = new URLSearchParams(
         Object.entries(result)
-          .filter(([value]) => value != null)
+          .filter(([key, value]) => value != null)
           .map(([key, value]) => [key, String(value)]),
       ).toString();
       http
@@ -78,10 +122,28 @@ export function FlightOffers() {
       }
     }
   }, [searchParams]);
-
   return (
     <div>
-      <Button>Return</Button>
+      <Link to="/">
+        <Button>Return</Button>
+      </Link>
+      <div>
+        {/* setSorting(sortingStrategies.find(s => s.key == key)!) */}
+        <Select
+          // onSelectionChange={(keys) => console.log(keys.currentKey)}
+          onSelectionChange={(keys) =>
+            setSorting(sortingStrategies.find((s) => s.key == keys.currentKey)!)
+          }
+          className="max-w-xs"
+          defaultSelectedKeys={["price"]}
+          label="Sorting"
+          size="sm"
+        >
+          {sortingStrategies.map((sorting) => (
+            <SelectItem key={sorting.key}>{sorting.label}</SelectItem>
+          ))}
+        </Select>
+      </div>
       <div className="flex flex-col gap-y-4">
         {missingParams && (
           <Alert
@@ -89,12 +151,13 @@ export function FlightOffers() {
             title={`Provided url params are not correct`}
           ></Alert>
         )}
-        {offers?.data.map((o) => (
-          <FlightOffer
-            data={o}
-            dictionaries={offers.dictionaries}
-          ></FlightOffer>
-        ))}
+        {offers &&
+          sortedOffers.map((o) => (
+            <FlightOffer
+              data={o}
+              dictionaries={offers.dictionaries}
+            ></FlightOffer>
+          ))}
       </div>
     </div>
   );

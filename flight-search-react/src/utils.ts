@@ -40,16 +40,11 @@ export function formatISODuration(date: string) {
 }
 
 export function calculateOfferDuration(data: FlightOffer) {
-  return formatDuration(
-    data.itineraries
-      .map((i) => Duration.fromISO(i.duration))
-      .reduce((d1, d2) => d1.plus(d2))
-      .normalize()
-      .toObject(),
-    {
-      format: ["days", "hours", "minutes"],
-    },
-  );
+  return data.itineraries
+    .map((i) => Duration.fromISO(i.duration))
+    .reduce((d1, d2) => d1.plus(d2))
+    .normalize()
+    .toMillis();
 }
 
 export function formatDateDuration(start: string, end: string) {
