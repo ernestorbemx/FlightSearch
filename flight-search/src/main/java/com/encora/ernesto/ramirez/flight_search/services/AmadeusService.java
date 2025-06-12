@@ -76,9 +76,9 @@ public class AmadeusService {
                 )
                 .headers(h -> h.setBearerAuth(getAccessToken()))
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError,
+                .onStatus(code -> code.isSameCodeAs(HttpStatus.BAD_REQUEST),
                         clientResponse -> clientResponse.bodyToMono(Amadeus400Error.class)
-                                .map(body -> new AmadeusBadRequestException("API returned 4xx error: ", body.getErrors())
+                                .map(body -> new AmadeusBadRequestException("API returned 400 error: ", body.getErrors())
                                 ))
                 .bodyToMono(new ParameterizedTypeReference<AmadeusResponse<List<LocationResponseDto>>>() {
                 });
@@ -94,9 +94,9 @@ public class AmadeusService {
                 )
                 .headers(h -> h.setBearerAuth(getAccessToken()))
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError,
+                .onStatus(code -> code.isSameCodeAs(HttpStatus.BAD_REQUEST),
                         clientResponse -> clientResponse.bodyToMono(Amadeus400Error.class)
-                                .map(body -> new AmadeusBadRequestException("API returned 4xx error: ", body.getErrors())
+                                .map(body -> new AmadeusBadRequestException("API returned 400 error: ", body.getErrors())
                                 ))
                 .bodyToMono(new ParameterizedTypeReference<AmadeusResponse<LocationResponseDto>>() {
                 });
@@ -126,9 +126,9 @@ public class AmadeusService {
                 )
                 .headers(h -> h.setBearerAuth(getAccessToken()))
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError,
+                .onStatus(code -> code.isSameCodeAs(HttpStatus.BAD_REQUEST),
                         clientResponse -> clientResponse.bodyToMono(Amadeus400Error.class)
-                                .map(body -> new AmadeusBadRequestException("API returned 4xx error: ", body.getErrors())
+                                .map(body -> new AmadeusBadRequestException("API returned 400 error: ", body.getErrors())
                                 ))
                 .bodyToMono(new ParameterizedTypeReference<AmadeusResponseDictionary<List<FlightOffer>>>() {
                 });
