@@ -1,11 +1,15 @@
 import { Outlet } from "react-router";
+import { AppNavbar } from "./AppNavbar";
 
 export function AppLayout() {
   return (
-    <div className="flex justify-center px-4 py-8">
-      <div className="container">
-        <Outlet />
+    <>
+      <AppNavbar></AppNavbar>
+      <div className="flex justify-center my-8">
+        <div className="container max-w-[1024px] px-6">
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

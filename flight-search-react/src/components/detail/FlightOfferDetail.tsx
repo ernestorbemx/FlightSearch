@@ -16,8 +16,11 @@ export function FlightOfferDetail({ data, dictionaries }: Props) {
           {/* If is round trip */}
           {data.itineraries.map((i, index) => (
             <Tab key={`itinerary-${index}`} title={`Itinerary ${index + 1}`}>
-              <span>
-                Total time for this itinerary: {formatISODuration(i.duration)}
+              <span className="inline-block mb-4">
+                Total time for this itinerary:{" "}
+                <span className="font-semibold">
+                  {formatISODuration(i.duration)}
+                </span>
               </span>
               <FlightItineraryDetail
                 travelerPricing={data.travelerPricings}

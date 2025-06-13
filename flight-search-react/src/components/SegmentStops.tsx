@@ -12,7 +12,7 @@ export function SegmentStops({ data, dictionaries }: Props) {
   }
 
   return (
-    <div>
+    <div className="text-stone-500 text-xs ml-2">
       {data.stops.map((s, ix) => (
         <span>
           Stop #{ix + 1}: Aiport {dictionaries.locations[s.iataCode]?.name}{" "}

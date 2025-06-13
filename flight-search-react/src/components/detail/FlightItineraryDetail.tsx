@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { Dictionary, Itineraries, TravelerPricing } from "../../types";
 import { FlightSegment } from "../detail/FlightSegment";
 import { SegmentLayover } from "./SegmentLayover";

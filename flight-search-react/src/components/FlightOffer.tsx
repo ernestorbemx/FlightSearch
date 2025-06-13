@@ -11,7 +11,6 @@ interface Props {
   dictionaries: Dictionary;
 }
 export function FlightOffer({ data, dictionaries }: Props) {
-  console.log({ data });
   const navigate = useNavigate();
   //   const totalDuration = calculateOfferDuration(data);
   const [carriers, setCarriers] = useState<string[]>(
@@ -29,8 +28,8 @@ export function FlightOffer({ data, dictionaries }: Props) {
         <div className="flex gap-x-16">
           <div className="flex-1">
             {carriers.length == 1 && (
-              <span className="text-lg font-semibold font-mono">
-                {dictionaries.carriers[carriers[0]]}({carriers[0]})
+              <span className="inline-block text-lg font-semibold font-mono my-2">
+                {dictionaries.carriers[carriers[0]]} ({carriers[0]})
               </span>
             )}
             {data.itineraries.map((i, ix) => (
@@ -52,13 +51,16 @@ export function FlightOffer({ data, dictionaries }: Props) {
               {data.price.grandTotal}{" "}
               {data.price.billingCurrency ?? data.price.currency} total
             </div>
-            <div className="text-stone-500 text-lg">
+            <div className="text-stone-500 text-sm">
               {data.travelerPricings[0].price.total}{" "}
               {data.travelerPricings[0].price.billingCurrency ??
                 data.travelerPricings[0].price.currency}{" "}
               per traveler
             </div>
             <Button
+              className="mt-1"
+              color="primary"
+              size="sm"
               onPress={() => {
                 setFlight(data);
                 navigate("/detail");

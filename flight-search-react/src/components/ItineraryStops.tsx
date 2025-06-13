@@ -8,7 +8,7 @@ interface Props {
 
 export function ItineraryStops({ data, dictionaries }: Props) {
   return (
-    <div>
+    <div className="text-stone-500 text-xs ml-2">
       {data.segments
         .flatMap((s) => s.stops)
         .filter((s) => s != null)

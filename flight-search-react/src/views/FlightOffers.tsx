@@ -11,6 +11,9 @@ import * as yup from "yup";
 import { Alert, Select, SelectItem } from "@heroui/react";
 import { useFlightStore } from "../stores/flight-store";
 import { calculateOfferDuration } from "../utils";
+import axios from "axios";
+import { FlightOfferSkeleton } from "../components/skeletons/FlightOfferSkeleton";
+import { CaretLeftFilled } from "../components/icons/CaretLeftIcon";
 
 // const example: FlightOfferRequest = {
 //   currency: "USD",
@@ -77,6 +80,8 @@ const sortingStrategies: SortingStrategy[] = [
 
 export function FlightOffers() {
   const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>();
   const [sorting, setSorting] = useState<SortingStrategy>(sortingStrategies[0]);
   const [missingParams, setMissingParams] = useState(false);
   const setDictionaries = useFlightStore((s) => s.setDictionaries);
@@ -93,6 +98,7 @@ export function FlightOffers() {
     const departureAirport = searchParams.get("departure");
     const arrivalAirport = searchParams.get("arrival");
     const departureDate = searchParams.get("departureDate"); // optional
+    setLoading(true);
 
     try {
       const result = schema.validateSync({
@@ -106,7 +112,8 @@ export function FlightOffers() {
       });
       const params = new URLSearchParams(
         Object.entries(result)
-          .filter(([key, value]) => value != null)
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          .filter(([_, value]) => value != null)
           .map(([key, value]) => [key, String(value)]),
       ).toString();
       http
@@ -115,19 +122,29 @@ export function FlightOffers() {
           setOffers(res.data);
           setDictionaries(res.data.dictionaries);
         })
-        .catch(() => {});
+        .catch((err) => {
+          if (axios.isCancel(err)) {
+            console.log("Request aborted");
+          } else {
+            setError(err);
+          }
+        })
+        .finally(() => setLoading(false));
     } catch (e) {
       if (yup.ValidationError.isError(e)) {
         setMissingParams(true);
       }
     }
-  }, [searchParams]);
+  }, [searchParams, setDictionaries]);
   return (
     <div>
       <Link to="/">
-        <Button>Return</Button>
+        <Button variant="light" className="flex items-center">
+          <CaretLeftFilled />
+          Return
+        </Button>
       </Link>
-      <div>
+      <div className="flex justify-end my-4">
         {/* setSorting(sortingStrategies.find(s => s.key == key)!) */}
         <Select
           // onSelectionChange={(keys) => console.log(keys.currentKey)}
@@ -137,6 +154,7 @@ export function FlightOffers() {
           className="max-w-xs"
           defaultSelectedKeys={["price"]}
           label="Sorting"
+          labelPlacement="outside-left"
           size="sm"
         >
           {sortingStrategies.map((sorting) => (
@@ -145,6 +163,14 @@ export function FlightOffers() {
         </Select>
       </div>
       <div className="flex flex-col gap-y-4">
+        {error && (
+          <Alert
+            color="danger"
+            title={`Error occured while performing serach of flights: ${error}`}
+          />
+        )}
+        {loading &&
+          Array.from({ length: 3 }, (_, i) => <FlightOfferSkeleton key={i} />)}
         {missingParams && (
           <Alert
             color="danger"
@@ -154,6 +180,7 @@ export function FlightOffers() {
         {offers &&
           sortedOffers.map((o) => (
             <FlightOffer
+              key={o.id}
               data={o}
               dictionaries={offers.dictionaries}
             ></FlightOffer>

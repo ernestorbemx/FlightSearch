@@ -65,13 +65,14 @@ export function AirportAutoComplete({
           (t) => list.items.find((i) => i.iataCode == key)?.iataCode ?? t,
         );
       }}
-      className="max-w-xs"
+      className="max-w-[284px] w-full sm:min-w-[284px]"
       inputValue={text}
       isLoading={list.isLoading}
       items={list.items}
       label={label}
       placeholder="Type city or airport to search..."
       variant="bordered"
+      labelPlacement="inside"
       onInputChange={setText}
       isInvalid={isInvalid}
       errorMessage={errorMessage}

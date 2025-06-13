@@ -10,6 +10,8 @@ import {
 } from "../utils";
 import { ItineraryStops } from "./ItineraryStops";
 import { DayOffset } from "./DayOffset";
+import { Divider, Skeleton } from "@heroui/react";
+import { AirplaneIcon } from "./icons/AirplaneIcon";
 
 interface Props {
   data: Itineraries;
@@ -18,17 +20,22 @@ interface Props {
 }
 
 export function FlightItinerary({ data, dictionaries, showCarrier }: Props) {
+  const [loading, setLoading] = useState(false);
   const [departure, setDeparture] = useState<Airport | null>(null);
   const [arrival, setArrival] = useState<Airport | null>(null);
 
   useEffect(() => {
-    // const lastItinerary = data.itineraries[data.itineraries.length - 1]; // this is for round trips
-    searchLocation(firstSegment.departure.iataCode, "AIRPORT")
-      .then((res) => setDeparture(res.data[0]))
-      .catch(() => {});
-    searchLocation(lastSegment.arrival.iataCode, "AIRPORT")
-      .then((res) => setArrival(res.data[0]))
-      .catch(() => {});
+    setLoading(true);
+    Promise.all([
+      searchLocation(firstSegment.departure.iataCode, "AIRPORT").then((res) =>
+        setDeparture(res.data[0]),
+      ),
+      searchLocation(lastSegment.arrival.iataCode, "AIRPORT").then((res) =>
+        setArrival(res.data[0]),
+      ),
+    ])
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [data]);
 
   const firstSegment = data.segments[0];
@@ -37,7 +44,10 @@ export function FlightItinerary({ data, dictionaries, showCarrier }: Props) {
   const carriers = calculateCarriers(data);
   const operatingCarriers = calculateOperatingCarriers(data);
 
-  const formattedDepartureAt = format(firstSegment.departure.at, "HH:mm");
+  const formattedDepartureAt = format(
+    firstSegment.departure.at,
+    "MMM do, yyyy HH:mm",
+  );
   const formattedArrivalAt = format(lastSegment.arrival.at, "HH:mm");
 
   const formattedDuration = formatISODuration(data.duration);
@@ -51,21 +61,47 @@ export function FlightItinerary({ data, dictionaries, showCarrier }: Props) {
 
   return (
     <div>
-      <div>
-        {formattedDepartureAt} - {formattedArrivalAt}
-        <DayOffset dayDifference={daysDiff} />
+      <div className="font-semibold flex items-center">
+        {loading && (
+          <Skeleton className="inline-flex w-3/5 rounded-lg">
+            <div className="h-3 w-3/5 rounded-lg bg-default-200" />
+          </Skeleton>
+        )}
+        {!loading && (
+          <>
+            {departure && (
+              <>
+                {departure?.name} ({departure?.iataCode})
+              </>
+            )}
+            <div className="inline-flex mx-2 items-center gap-x-2">
+              <Divider className="w-4"></Divider>
+              <AirplaneIcon />
+              <Divider className="w-4"></Divider>
+            </div>
+            {arrival && (
+              <>
+                {arrival?.name} ({arrival?.iataCode})
+              </>
+            )}
+            <span className="ml-1 font-semibold">
+              {stops > 0 ? ` (${stops} stops)` : ""}
+            </span>
+          </>
+        )}
       </div>
-      <div className="font-semibold">
-        {departure?.name} ({departure?.iataCode}) - {arrival?.name} (
-        {arrival?.iataCode})
-      </div>
       <div>
-        <span>{formattedDuration}</span>
-        <span>{stops > 0 ? `(${stops} stops)` : ""}</span>
         <ItineraryStops
           data={data}
           dictionaries={dictionaries}
         ></ItineraryStops>
+      </div>
+      <div>
+        {formattedDepartureAt} - {formattedArrivalAt}
+        <DayOffset dayDifference={daysDiff} />
+      </div>
+      <div>
+        <span>{formattedDuration}</span>
       </div>
 
       {showCarrier && (

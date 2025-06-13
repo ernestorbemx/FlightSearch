@@ -9,6 +9,10 @@ export function FlightPriceBreakdown({
   price: price,
   travelerPricing: tp,
 }: Props) {
+  const totalTaxes = price.taxes?.reduce((f1, f2) => (f1 += f2.amount), 0) ?? 0;
+  const totalFees = price.fees?.reduce((f1, f2) => (f1 += f2.amount), 0) ?? 0;
+  const otherCharges = price.total - price.base - totalTaxes - totalFees;
+  const currency = price.billingCurrency ?? price.currency;
   return (
     <Card>
       <CardHeader>
@@ -19,28 +23,26 @@ export function FlightPriceBreakdown({
           <div className="flex gap-x-2">
             <span className="flex-1">Base price</span>
             <span>
-              {price.base} {price.billingCurrency ?? price.currency}
+              {price.base} {currency}
             </span>
           </div>
 
           <div className="flex gap-x-2 flex-wrap">
             <span className="w-full">Fees</span>
             <div className="flex flex-col w-full items-end">
-              {!price.fees && <span>Not specified</span>}
+              {!price.fees && <span>Not available</span>}
               {price.fees && (
                 <>
                   {price.fees.map((f) => (
                     <div>
                       <span>{f.type}: </span>
                       <span>
-                        {f.amount} {price.billingCurrency ?? price.currency}
+                        {f.amount} {currency}
                       </span>
                     </div>
                   ))}
                   <span>
-                    Total fees:{" "}
-                    {price.fees.reduce((f1, f2) => (f1 += f2.amount), 0)}{" "}
-                    {price.billingCurrency ?? price.currency}
+                    Total fees: {totalFees} {currency}
                   </span>
                 </>
               )}
@@ -49,38 +51,46 @@ export function FlightPriceBreakdown({
           <div className="flex gap-x-2 flex-wrap">
             <span className="w-full">Taxes</span>
             <div className="flex flex-col w-full items-end">
-              {!price.taxes && <span>Not specified</span>}
+              {!price.taxes && <span>Not available</span>}
               {price.taxes && (
                 <>
                   {price.taxes?.map((tax) => (
                     <div>
                       <span>{tax.code}: </span>
                       <span>
-                        {tax.amount} {price.billingCurrency ?? price.currency}
+                        {tax.amount} {currency}
                       </span>
                     </div>
                   ))}
                   <span>
-                    Total taxes:{" "}
-                    {price.taxes?.reduce((f1, f2) => (f1 += f2.amount), 0)}{" "}
-                    {price.billingCurrency ?? price.currency}
+                    Total taxes: {totalTaxes} {currency}
                   </span>
                 </>
               )}
             </div>
           </div>
+          <div className="flex gap-x-2">
+            <span className="flex-1">Other charges</span>
+            <span>
+              {otherCharges} {currency}
+            </span>
+          </div>
           <div className="flex flex-wrap gap-x-2 font-bold">
             <span className="flex-1">Total price</span>
             <span>
-              {price.total} {price.billingCurrency ?? price.currency}
+              {price.total} {currency}
             </span>
           </div>
           <hr className="my-4" />
-          <span className="text-lg font-semibold">Traveler pricing</span>
+          <span className="text-medium font-semibold">
+            Pricing per traveler
+          </span>
           <div className="flex flex-col">
-            {tp.map((f) => (
-              <div>
-                <span>{f.travelerType} - </span>
+            {tp.map((f, ix) => (
+              <div className="text-sm">
+                <span>
+                  {f.travelerType} {ix + 1} -{" "}
+                </span>
                 <span>
                   {f.price.total} {f.price.billingCurrency ?? f.price.currency}
                 </span>

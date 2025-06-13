@@ -1,3 +1,4 @@
+import { Chip } from "@heroui/react";
 import type { FareDetailsBySegment } from "../../types";
 import { FlightAmmenity } from "./FlightAmmenity";
 
@@ -7,24 +8,45 @@ interface Props {
 export function FareDetails({ data }: Props) {
   return (
     <div className="flex flex-col w-full">
-      <div className="w-full">
-        <span className="">Cabin Type: </span>
-        <span>{data.cabin}</span>
+      <div className="flex gap-x-2">
+        <div className="">
+          <span className="">Cabin Type: </span>
+          <span>
+            <Chip color="primary">{data.cabin}</Chip>
+          </span>
+        </div>
+        <div className="">
+          <span className="">Class: </span>
+          <span>
+            <Chip color="secondary">{data.cabin}</Chip>
+          </span>
+        </div>
       </div>
-      <div className="w-full">
-        <span className="">Class: </span>
-        <span>{data.class}</span>
-      </div>
+
       {data.includedCheckedBags && (
         <div className="w-full">
           <span className="">Included checked bags: </span>
-          <span>{data.includedCheckedBags.quantity}</span>
+          <span>
+            <Chip
+              size="sm"
+              color={
+                data.includedCheckedBags.quantity == 0 ? "danger" : "success"
+              }
+            >
+              {data.includedCheckedBags.quantity}
+            </Chip>
+          </span>
         </div>
       )}
-      {data.includedCheckedBags && (
+      {data.includedCabinBags && (
         <div className="w-full">
           <span className="">Included Cabin bags: </span>
-          <span>{data.includedCheckedBags.quantity}</span>
+          <Chip
+            size="sm"
+            color={data.includedCabinBags.quantity == 0 ? "danger" : "success"}
+          >
+            {data.includedCabinBags.quantity}
+          </Chip>
         </div>
       )}
       {data.amenities && (
@@ -34,7 +56,7 @@ export function FareDetails({ data }: Props) {
               <FlightAmmenity data={a} />
             ))}
           </div>
-          <b>* Is chargeable</b>
+          <span className="text-xs font-semibold">* Is chargeable</span>
         </div>
       )}
     </div>
