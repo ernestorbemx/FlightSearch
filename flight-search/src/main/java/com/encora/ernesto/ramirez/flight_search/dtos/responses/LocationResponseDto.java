@@ -8,6 +8,13 @@ public class LocationResponseDto {
     private String id;
     private String iataCode;
 
+    public LocationResponseDto(String type, String subType, String name, String id, String iataCode) {
+        this.type = type;
+        this.subType = subType;
+        this.name = name;
+        this.id = id;
+        this.iataCode = iataCode;
+    }
 
     public String getType() {
         return type;

@@ -16,6 +16,13 @@ public class AirportSearchDto {
     @Min(0)
     private int offset;
 
+    public AirportSearchDto(String keyword, String subtype, int pageSize, int offset) {
+        this.keyword = keyword;
+        this.subtype = subtype;
+        this.pageSize = pageSize;
+        this.offset = offset;
+    }
+
     public String getKeyword() {
         return keyword;
     }

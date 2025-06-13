@@ -24,6 +24,16 @@ public class FlightSearchDto {
     @NotNull
     private boolean nonStop;
 
+    public FlightSearchDto(String departureAirport, String arrivalAirport, LocalDate departureDate, LocalDate returnDate, String currency, int numberAdults, boolean nonStop) {
+        this.departureAirport = departureAirport;
+        this.arrivalAirport = arrivalAirport;
+        this.departureDate = departureDate;
+        this.returnDate = returnDate;
+        this.currency = currency;
+        this.numberAdults = numberAdults;
+        this.nonStop = nonStop;
+    }
+
     public String getDepartureAirport() {
         return departureAirport;
     }

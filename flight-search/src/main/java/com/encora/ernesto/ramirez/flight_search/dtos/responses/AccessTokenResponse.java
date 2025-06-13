@@ -14,6 +14,10 @@ public class AccessTokenResponse {
         this.accessToken = accessToken;
     }
 
+    public AccessTokenResponse(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
     @Override
     public String toString() {
         return "AccessTokenResponse{" +
