@@ -1,29 +1,38 @@
 package com.encora.ernesto.ramirez.flight_search.dtos.body;
 
 import com.encora.ernesto.ramirez.flight_search.validation.ValidDateRange;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
+@Schema(description = "Flight offers search parameters")
 @ValidDateRange
 public class FlightSearchDto {
 
     @NotBlank
     @NotEmpty
+    @Schema(description = "Departure airport IATA Code")
     private String departureAirport;
     @NotBlank
     @NotEmpty
+    @Schema(description = "Arrival airport IATA Code")
     private String arrivalAirport;
     @NotNull
+    @Schema(description = "Departure date")
     private LocalDate departureDate;
+    @Schema(description = "Return date (cannot be before departureDate)")
     private LocalDate returnDate;
     @NotEmpty
+    @Schema(description = "Currency on ISO format (USD, MXN, EUR)")
     private String currency;
     @NotNull
     @Min(1)
     @Max(9)
+    @Schema(description = "Number of adults seats to search for")
     private int numberAdults;
     @NotNull
+    @Schema(description = "Should flight offers include stops?")
     private boolean nonStop;
 
     public FlightSearchDto(String departureAirport, String arrivalAirport, LocalDate departureDate, LocalDate returnDate, String currency, int numberAdults, boolean nonStop) {

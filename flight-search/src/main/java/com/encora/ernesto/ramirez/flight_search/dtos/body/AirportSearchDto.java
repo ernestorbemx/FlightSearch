@@ -1,13 +1,17 @@
 package com.encora.ernesto.ramirez.flight_search.dtos.body;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+@Schema(description = "Airport search parameters")
 public class AirportSearchDto {
     @NotEmpty
+    @Schema(description = "City or airport name or code")
     private String keyword; // City or airport name or code
     @NotEmpty
+    @Schema(description = "CITY or AIRPORT at the moment")
     private String subtype; // CITY or AIRPORT
     @NotNull
     @Min(1)
