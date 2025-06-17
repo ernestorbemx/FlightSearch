@@ -10,7 +10,7 @@ import { FareDetails } from "./FareDetails";
 import { useEffect, useState } from "react";
 import { searchLocation } from "../../http";
 import { differenceInCalendarDays, format } from "date-fns";
-import { formatDateDuration } from "../../utils";
+import { formatISODuration } from "../../utils";
 import { DayOffset } from "../DayOffset";
 import { Accordion, AccordionItem, Divider, Skeleton } from "@heroui/react";
 import { AirplaneIcon } from "../icons/AirplaneIcon";
@@ -49,7 +49,7 @@ export function FlightSegment({
     "MMM do, yyyy HH:mm",
   );
   const formattedArrivalAt = format(segment.arrival.at, "HH:mm");
-  const duration = formatDateDuration(segment.departure.at, segment.arrival.at);
+  const duration = formatISODuration(segment.duration);
 
   const daysDiff = differenceInCalendarDays(
     segment.arrival.at,
