@@ -103,7 +103,7 @@ export function FlightSearch() {
                   value={value as DateValue}
                   onChange={onChange}
                   onBlur={onBlur}
-                  minValue={today(getLocalTimeZone())}
+                  minValue={today(getLocalTimeZone()).add({ days: 1 })}
                   maxValue={maxDate as DateValue}
                   isInvalid={!!errors.departureDate}
                   errorMessage="Select a date"
