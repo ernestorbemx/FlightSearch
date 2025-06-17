@@ -8,6 +8,12 @@ interface Props {
   data: FlightOffer;
   dictionaries: Dictionary;
 }
+
+const itineraryLabel: Record<string, string> = {
+  0: "Departure flight",
+  1: "Arrival flight",
+};
+
 export function FlightOfferDetail({ data, dictionaries }: Props) {
   return (
     <div className="flex flex-wrap gap-8">
@@ -15,7 +21,10 @@ export function FlightOfferDetail({ data, dictionaries }: Props) {
         <Tabs aria-label="itineraries">
           {/* If is round trip */}
           {data.itineraries.map((i, index) => (
-            <Tab key={`itinerary-${index}`} title={`Itinerary ${index + 1}`}>
+            <Tab
+              key={`itinerary-${index}`}
+              title={itineraryLabel[index] ?? `Itinerary ${index + 1}`}
+            >
               <span className="inline-block mb-4">
                 Total time for this itinerary:{" "}
                 <span className="font-semibold">
