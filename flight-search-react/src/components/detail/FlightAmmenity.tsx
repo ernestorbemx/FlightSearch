@@ -32,7 +32,7 @@ export function FlightAmmenity({ data }: Props) {
   return (
     <div className="flex">
       <Tooltip content={data.description}>
-        <div>
+        <div data-testid="tooltip-content">
           <AmenityIcon amenity={data.amenityType}></AmenityIcon>{" "}
           <span className="text-xs font-semibold">
             {data.isChargeable ? "*" : ""}

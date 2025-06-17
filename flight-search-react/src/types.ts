@@ -31,8 +31,8 @@ export interface FlightPrice {
   currency: string;
   total: number;
   base: number;
-  fees: Fee[];
-  taxes: Tax[];
+  fees?: Fee[];
+  taxes?: Tax[];
 }
 
 export interface Fee {
@@ -52,14 +52,15 @@ export interface Itineraries {
 
 export interface Segments {
   id: string;
-  numberOfStops: string;
+  numberOfStops: number;
   departure: FlightEndpoint;
   arrival: FlightEndpoint;
   carrierCode: string;
   operating: OperatingAircraft;
-  stops: FlightStop[];
+  stops?: FlightStop[];
   aircraft: Aircraft;
   number: number;
+  duration: string;
 }
 
 export interface OperatingAircraft {
@@ -72,7 +73,7 @@ export interface Aircraft {
 
 export interface FlightEndpoint {
   iataCode: string;
-  terminal: string;
+  terminal?: string;
   at: string;
 }
 

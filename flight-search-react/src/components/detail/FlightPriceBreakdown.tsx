@@ -89,10 +89,8 @@ export function FlightPriceBreakdown({
             {tp.map((f, ix) => (
               <div className="text-sm">
                 <span>
-                  {f.travelerType} {ix + 1} -{" "}
-                </span>
-                <span>
-                  {f.price.total} {f.price.billingCurrency ?? f.price.currency}
+                  {f.travelerType} {ix + 1} - {f.price.total}{" "}
+                  {f.price.billingCurrency ?? f.price.currency}
                 </span>
               </div>
             ))}

@@ -57,6 +57,7 @@ export function AirportAutoComplete({
 
   return (
     <Autocomplete
+      data-testid="autocomplete"
       selectedKey={internalValue}
       onSelectionChange={(key) => {
         setInternalValue(key as string);

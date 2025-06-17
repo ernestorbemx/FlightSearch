@@ -63,7 +63,10 @@ export function FlightItinerary({ data, dictionaries, showCarrier }: Props) {
     <div>
       <div className="font-semibold flex items-center">
         {loading && (
-          <Skeleton className="inline-flex w-3/5 rounded-lg">
+          <Skeleton
+            data-testid="skeleton-airline"
+            className="inline-flex w-3/5 rounded-lg"
+          >
             <div className="h-3 w-3/5 rounded-lg bg-default-200" />
           </Skeleton>
         )}

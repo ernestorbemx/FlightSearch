@@ -14,7 +14,7 @@ export function ItineraryStops({ data, dictionaries }: Props) {
         .filter((s) => s != null)
         .map((s, ix) => (
           <span>
-            Stop #{ix + 1}: {formatISODuration(s.duration)} at
+            Stop #{ix + 1}: {formatISODuration(s.duration)} at{" "}
             {dictionaries.locations[s.iataCode]?.name} {s.iataCode}
           </span>
         ))}
