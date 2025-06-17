@@ -24,9 +24,15 @@ public class GlobalExceptionHandlers {
             MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
+            if(error instanceof  FieldError) {
+                String fieldName = ((FieldError) error).getField();
+                String errorMessage = error.getDefaultMessage();
+                errors.put(fieldName, errorMessage);
+            } else {
+                errors.put("other",
+                        error.getDefaultMessage()
+                );
+            }
         });
         return ResponseEntity.badRequest().body(new ValidationErrorResponse("Error while validating dto", errors));
     }

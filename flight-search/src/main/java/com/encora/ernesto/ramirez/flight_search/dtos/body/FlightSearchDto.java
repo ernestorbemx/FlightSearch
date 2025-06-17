@@ -1,9 +1,11 @@
 package com.encora.ernesto.ramirez.flight_search.dtos.body;
 
+import com.encora.ernesto.ramirez.flight_search.validation.ValidDateRange;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
+@ValidDateRange
 public class FlightSearchDto {
 
     @NotBlank
