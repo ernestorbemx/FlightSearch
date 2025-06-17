@@ -113,6 +113,7 @@ public class AmadeusService {
                                             .queryParam("destinationLocationCode", search.getArrivalAirport())
                                             .queryParam("departureDate", search.getDepartureDate())
                                             .queryParam("adults", search.getNumberAdults())
+                                            .queryParam("currencyCode", search.getCurrency())
                                             .queryParam("max", 20);
 
                             if (search.getReturnDate() == null) {
