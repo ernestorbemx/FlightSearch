@@ -1,54 +1,61 @@
-# React + TypeScript + Vite
+# Flight Search React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This application provides a web User Interface for the Amadeus REST API, allowing you to search for
+flights given a set of parameters (departure, arrival, departue date, no. of adults, etc.)
 
-Currently, two official plugins are available:
+## 🚀 Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Features](#features)
+- [Installation](#installation)
+- [Running for development](#running-for-development)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Search form (arrival/departure airport, arrival/departure dates, no. of adults, include flights with stops or not)
+- Search results: List of flights (summary)
+- Flight Detail: Deeper view on Flight details
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+## Installation
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/ernestorbemx/FlightSearch.git
+cd FlightSearch/flight-search-react
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Running for development
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+Follow the [Installation](#installation) instructions and run:
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    "react-x": reactX,
-    "react-dom": reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs["recommended-typescript"].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
+```bash
+npm run dev
 ```
+
+Application in development listens in the port 5173 by default.
+
+## Testing
+
+Follow the [Installation](#installation) instructions and run:
+
+```bash
+npm run test
+```
+
+## Contributing
+
+Contributions are welcome! Please open an issue or pull request if you'd like to help.
+
+1. Fork the repo
+2. Create your feature branch: `git checkout -b feature/FeatureName`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature/FeatureName`
+5. Open a pull request
+
+## License
+
+This project is licensed under the MIT License.
