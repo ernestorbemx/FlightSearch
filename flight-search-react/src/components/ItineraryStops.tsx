@@ -13,7 +13,7 @@ export function ItineraryStops({ data, dictionaries }: Props) {
         .flatMap((s) => s.stops)
         .filter((s) => s != null)
         .map((s, ix) => (
-          <span>
+          <span key={ix}>
             Stop #{ix + 1}: {formatISODuration(s.duration)} at{" "}
             {dictionaries.locations[s.iataCode]?.name} {s.iataCode}
           </span>

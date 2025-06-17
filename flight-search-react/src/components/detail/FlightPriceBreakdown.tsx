@@ -34,7 +34,7 @@ export function FlightPriceBreakdown({
               {price.fees && (
                 <>
                   {price.fees.map((f) => (
-                    <div>
+                    <div key={f.type}>
                       <span>{f.type}: </span>
                       <span>
                         {f.amount} {currency}
@@ -55,7 +55,7 @@ export function FlightPriceBreakdown({
               {price.taxes && (
                 <>
                   {price.taxes?.map((tax) => (
-                    <div>
+                    <div key={tax.code}>
                       <span>{tax.code}: </span>
                       <span>
                         {tax.amount} {currency}
@@ -87,7 +87,7 @@ export function FlightPriceBreakdown({
           </span>
           <div className="flex flex-col">
             {tp.map((f, ix) => (
-              <div className="text-sm">
+              <div className="text-sm" key={ix}>
                 <span>
                   {f.travelerType} {ix + 1} - {f.price.total}{" "}
                   {f.price.billingCurrency ?? f.price.currency}
