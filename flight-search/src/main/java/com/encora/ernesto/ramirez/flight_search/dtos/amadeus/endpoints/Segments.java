@@ -12,6 +12,15 @@ public class Segments {
     private List<FlightStop> stops;
     private int number;
 
+    private String duration;
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
 
     private AirCraftEquipment aircraft;
     private OperatingFlight operating;
