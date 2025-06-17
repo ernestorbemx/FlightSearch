@@ -1,8 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { FlightAmmenity } from "./FlightAmmenity";
 import type { Amenity } from "../../types";
-import userEvent, { type UserEvent } from "@testing-library/user-event";
 
 describe("FlightAmmenity", () => {
   const baseAmenity: Amenity = {
@@ -10,11 +9,6 @@ describe("FlightAmmenity", () => {
     description: "In-flight meal included",
     isChargeable: false,
   };
-  let user: UserEvent;
-
-  beforeEach(() => {
-    user = userEvent.setup();
-  });
 
   it("renders the correct icon and description", async () => {
     render(<FlightAmmenity data={baseAmenity} />);

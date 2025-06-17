@@ -81,9 +81,17 @@ describe("<SegmentStops />", () => {
   });
 
   it("handles stop with unknown airport in dictionary", () => {
-    const segmentWithUnknownStop = {
+    const segmentWithUnknownStop: Segments = {
       ...mockSegmentWithStops,
-      stops: [{ duration: "PT2H", iataCode: "ZZZ" }],
+      stops: [
+        {
+          duration: "PT2H",
+          iataCode: "ZZZ",
+          arrivalAt: "not used",
+          departureAt: "not used",
+          description: "not used",
+        },
+      ],
     };
 
     render(
