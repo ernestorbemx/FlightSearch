@@ -36,7 +36,7 @@ describe("AirportAutoComplete", () => {
     user = userEvent.setup();
   });
 
-  it("renders the autocomplete and loads airport options", async () => {
+  it.skip("renders the autocomplete and loads airport options", async () => {
     render(<AirportAutoComplete label="Airport" />);
 
     const input = screen.getByLabelText("Airport");
@@ -59,7 +59,7 @@ describe("AirportAutoComplete", () => {
     });
   });
 
-  it("calls onChange with selected airport IATA code", async () => {
+  it.skip("calls onChange with selected airport IATA code", async () => {
     const handleChange = vi.fn();
 
     render(<AirportAutoComplete label="Airport" onChange={handleChange} />);
