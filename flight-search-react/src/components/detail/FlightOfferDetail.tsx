@@ -10,8 +10,8 @@ interface Props {
 }
 
 const itineraryLabel: Record<string, string> = {
-  0: "Departure flight",
-  1: "Arrival flight",
+  0: "Departure itinerary",
+  1: "Arrival itinerary",
 };
 
 export function FlightOfferDetail({ data, dictionaries }: Props) {
