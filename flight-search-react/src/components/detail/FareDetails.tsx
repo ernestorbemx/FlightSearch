@@ -51,6 +51,8 @@ export function FareDetails({ data }: Props) {
       )}
       {data.amenities && (
         <div className="">
+          <h4 className="font-semibold">Amenities</h4>
+          <p className="text-stone-400 text-sm">Hover to see details</p>
           <div className="flex flex-wrap">
             {data.amenities.map((a) => (
               <FlightAmmenity data={a} />

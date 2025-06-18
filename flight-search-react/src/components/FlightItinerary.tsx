@@ -10,8 +10,9 @@ import {
 } from "../utils";
 import { ItineraryStops } from "./ItineraryStops";
 import { DayOffset } from "./DayOffset";
-import { Divider, Skeleton } from "@heroui/react";
+import { addToast, Divider, Skeleton } from "@heroui/react";
 import { AirplaneIcon } from "./icons/AirplaneIcon";
+import { isAxiosError } from "axios";
 
 interface Props {
   data: Itineraries;
@@ -27,12 +28,28 @@ export function FlightItinerary({ data, dictionaries, showCarrier }: Props) {
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      searchLocation(firstSegment.departure.iataCode, "AIRPORT").then((res) =>
-        setDeparture(res.data[0]),
-      ),
-      searchLocation(lastSegment.arrival.iataCode, "AIRPORT").then((res) =>
-        setArrival(res.data[0]),
-      ),
+      searchLocation(firstSegment.departure.iataCode, "AIRPORT")
+        .then((res) => setDeparture(res.data[0]))
+        .catch((e) => {
+          if (isAxiosError(e)) {
+            addToast({
+              title: `Error while searching airport ${firstSegment.departure.iataCode}`,
+              description: `Error: ${e}`,
+              color: "danger",
+            });
+          }
+        }),
+      searchLocation(lastSegment.arrival.iataCode, "AIRPORT")
+        .then((res) => setArrival(res.data[0]))
+        .catch((e) => {
+          if (isAxiosError(e)) {
+            addToast({
+              title: `Error while searching airport ${lastSegment.arrival.iataCode}`,
+              description: `Error: ${e}`,
+              color: "danger",
+            });
+          }
+        }),
     ])
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -71,7 +88,7 @@ export function FlightItinerary({ data, dictionaries, showCarrier }: Props) {
           </Skeleton>
         )}
         {!loading && (
-          <>
+          <div className="flex items-center">
             {departure && (
               <>
                 {departure?.name} ({departure?.iataCode})
@@ -90,7 +107,7 @@ export function FlightItinerary({ data, dictionaries, showCarrier }: Props) {
             <span className="ml-1 font-semibold">
               {stops > 0 ? ` (${stops} stops)` : ""}
             </span>
-          </>
+          </div>
         )}
       </div>
       <div>

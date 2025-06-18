@@ -12,8 +12,15 @@ import { searchLocation } from "../../http";
 import { differenceInCalendarDays, format } from "date-fns";
 import { formatISODuration } from "../../utils";
 import { DayOffset } from "../DayOffset";
-import { Accordion, AccordionItem, Divider, Skeleton } from "@heroui/react";
+import {
+  Accordion,
+  AccordionItem,
+  addToast,
+  Divider,
+  Skeleton,
+} from "@heroui/react";
 import { AirplaneIcon } from "../icons/AirplaneIcon";
+import { isAxiosError } from "axios";
 
 interface Props {
   dictionaries: Dictionary;
@@ -33,15 +40,29 @@ export function FlightSegment({
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      searchLocation(segment.departure.iataCode, "AIRPORT").then((res) =>
-        setDeparture(res.data[0]),
-      ),
-      searchLocation(segment.arrival.iataCode, "AIRPORT").then((res) =>
-        setArrival(res.data[0]),
-      ),
-    ])
-      .catch(() => {})
-      .finally(() => setLoading(false));
+      searchLocation(segment.departure.iataCode, "AIRPORT")
+        .then((res) => setDeparture(res.data[0]))
+        .catch((e) => {
+          if (isAxiosError(e)) {
+            addToast({
+              title: `Error while searching airport ${segment.arrival.iataCode}`,
+              description: `Error: ${e}`,
+              color: "danger",
+            });
+          }
+        }),
+      searchLocation(segment.arrival.iataCode, "AIRPORT")
+        .then((res) => setArrival(res.data[0]))
+        .catch((e) => {
+          if (isAxiosError(e)) {
+            addToast({
+              title: `Error while searching airport ${segment.arrival.iataCode}`,
+              description: `Error: ${e}`,
+              color: "danger",
+            });
+          }
+        }),
+    ]).finally(() => setLoading(false));
   }, [segment]);
 
   const formattedDepartureAt = format(
@@ -70,7 +91,7 @@ export function FlightSegment({
             </Skeleton>
           )}
           {!loading && (
-            <>
+            <div className="text-primary-800">
               <span>
                 {departure
                   ? `${departure?.name} (${segment.departure.iataCode})`
@@ -87,7 +108,7 @@ export function FlightSegment({
                   ? `${arrival?.name} (${segment.arrival.iataCode})`
                   : segment.arrival.iataCode}
               </span>
-            </>
+            </div>
           )}
         </div>
         <div>
@@ -108,7 +129,7 @@ export function FlightSegment({
             dictionaries={dictionaries}
           ></SegmentStops>
         </div>
-        <div>
+        <div className="font-semibold text-primary-800">
           {dictionaries.carriers[segment.carrierCode]} ({segment.carrierCode}) -
           Aircraft: {dictionaries.aircraft[segment.aircraft.code]}
           {segment.operating &&
@@ -121,13 +142,22 @@ export function FlightSegment({
             )}
         </div>
         <div className="border p-2 rounded-lg">
-          <h3 className="text-lg font-semibold">Fare details</h3>
+          <h3 className="text-lg font-semibold text-primary-800">
+            Fare details
+          </h3>
+          <p className="text-stone-400 text-sm">
+            Expand every traveler to see details
+          </p>
           <Accordion isCompact>
             {travelerPricing.map((tp, ix) => (
               <AccordionItem
                 key={`${tp.travelerType}-${ix}`}
                 aria-label={`${tp.travelerType}-${ix}`}
-                title={`${tp.travelerType} ${ix + 1}`}
+                title={
+                  <p className="font-semibold">
+                    {tp.travelerType} #{ix + 1}
+                  </p>
+                }
               >
                 <div>
                   <div className="ml-2">

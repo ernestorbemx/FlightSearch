@@ -28,7 +28,7 @@ export function FlightOffer({ data, dictionaries }: Props) {
         <div className="flex gap-x-16">
           <div className="flex-1">
             {carriers.length == 1 && (
-              <span className="inline-block text-lg font-semibold font-mono my-2">
+              <span className="text-lg font-semibold font-mono my-4 text-primary-800">
                 {dictionaries.carriers[carriers[0]]} ({carriers[0]})
               </span>
             )}
@@ -46,21 +46,20 @@ export function FlightOffer({ data, dictionaries }: Props) {
             ))}
           </div>
           <div className="border-stone-200 borde-0 border-l-1 px-4 max-w-48">
-            <h4 className="font-semibold">Cost</h4>
-            <div className="text-2xl font-semibold">
+            <h4 className="font-semibold text-primary-800">Cost</h4>
+            <div className="text-2xl font-semibold text-primary-800">
               {data.price.grandTotal}{" "}
               {data.price.billingCurrency ?? data.price.currency} total
             </div>
-            <div className="text-stone-500 text-sm">
+            <div className="text-stone-500">
               {data.travelerPricings[0].price.total}{" "}
               {data.travelerPricings[0].price.billingCurrency ??
                 data.travelerPricings[0].price.currency}{" "}
               per traveler
             </div>
             <Button
-              className="mt-1"
               color="primary"
-              size="sm"
+              variant="flat"
               onPress={() => {
                 setFlight(data);
                 navigate("/detail");

@@ -16,7 +16,9 @@ export function FlightPriceBreakdown({
   return (
     <Card>
       <CardHeader>
-        <h2 className="text-xl font-semibold">Price breakdown</h2>
+        <h2 className="text-xl font-semibold text-primary-800">
+          Price breakdown
+        </h2>
       </CardHeader>
       <CardBody>
         <div className="flex flex-col w-full">
@@ -72,10 +74,10 @@ export function FlightPriceBreakdown({
           <div className="flex gap-x-2">
             <span className="flex-1">Other charges</span>
             <span>
-              {otherCharges} {currency}
+              {otherCharges.toFixed(2)} {currency}
             </span>
           </div>
-          <div className="flex flex-wrap gap-x-2 font-bold">
+          <div className="flex flex-wrap gap-x-2 font-bold text-lg text-primary-800">
             <span className="flex-1">Total price</span>
             <span>
               {price.total} {currency}

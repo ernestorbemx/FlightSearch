@@ -11,7 +11,7 @@ import * as yup from "yup";
 import { Alert, Select, SelectItem } from "@heroui/react";
 import { useFlightStore } from "../stores/flight-store";
 import { calculateOfferDuration } from "../utils";
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { FlightOfferSkeleton } from "../components/skeletons/FlightOfferSkeleton";
 import { CaretLeftFilled } from "../components/icons/CaretLeftIcon";
 
@@ -126,6 +126,27 @@ export function FlightOffers() {
           if (axios.isCancel(err)) {
             console.log("Request aborted");
           } else {
+            if (isAxiosError(err)) {
+              if (err.response) {
+                const data = err.response.data;
+                if (data?.errors) {
+                  if (Array.isArray(data.errors)) {
+                    setError(data.errors[0]?.detail);
+                  } else {
+                    setError(
+                      Object.entries(data.errors as Record<string, string>)
+                        .map(([k, v]) => `${v}`)
+                        .join(", "),
+                    );
+                  }
+                  return;
+                }
+                setError(data?.message);
+                return;
+              }
+              setError(err.message);
+              return;
+            }
             setError(err);
           }
         })
@@ -139,7 +160,7 @@ export function FlightOffers() {
   return (
     <div>
       <Link to="/">
-        <Button variant="light" className="flex items-center">
+        <Button variant="light" className="flex items-center" color="default">
           <CaretLeftFilled />
           Return
         </Button>
@@ -153,7 +174,7 @@ export function FlightOffers() {
           }
           className="max-w-xs"
           defaultSelectedKeys={["price"]}
-          label="Sorting"
+          label="Sort by"
           labelPlacement="outside-left"
           size="sm"
         >
@@ -166,7 +187,7 @@ export function FlightOffers() {
         {error && (
           <Alert
             color="danger"
-            title={`Error occured while performing serach of flights: ${error}`}
+            title={`Error occured while performing search of flights: ${error}`}
           />
         )}
         {loading &&

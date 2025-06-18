@@ -1,4 +1,13 @@
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarMenuToggle,
+} from "@heroui/react";
+import clsx from "clsx";
 import { Link, useLocation } from "react-router";
 
 export const AcmeLogo = () => {
@@ -22,18 +31,37 @@ export function AppNavbar() {
   const location = useLocation();
 
   return (
-    <Navbar>
-      <NavbarBrand>
-        <AcmeLogo />
-        <p className="font-bold text-inherit">ACMETrips</p>
-      </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+    <Navbar isBordered={location.pathname != "/"}>
+      <NavbarContent className="sm:hidden" justify="start">
+        <NavbarMenuToggle />
+        <NavbarBrand>
+          <AcmeLogo />
+          <p className="font-bold text-inherit">ACMETrips</p>
+        </NavbarBrand>
+      </NavbarContent>
+
+      <NavbarContent className={clsx("hidden sm:flex gap-4")} justify="center">
+        <NavbarBrand className="text-primary-800">
+          <AcmeLogo />
+          <p className="font-bold text-inherit">ACMETrips</p>
+        </NavbarBrand>
         <NavbarItem isActive={location.pathname == "/"}>
           <Link color="foreground" to="/">
             Search
           </Link>
         </NavbarItem>
       </NavbarContent>
+      <NavbarContent
+        className="hidden sm:flex gap-4"
+        justify="center"
+      ></NavbarContent>
+      <NavbarMenu>
+        <NavbarMenuItem>
+          <Link color="foreground" to="/">
+            Search
+          </Link>
+        </NavbarMenuItem>
+      </NavbarMenu>
     </Navbar>
   );
 }

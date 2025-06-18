@@ -1,3 +1,4 @@
+import { Fragment } from "react/jsx-runtime";
 import type { Dictionary, Itineraries, TravelerPricing } from "../../types";
 import { FlightSegment } from "../detail/FlightSegment";
 import { SegmentLayover } from "./SegmentLayover";
@@ -27,7 +28,7 @@ export function FlightItineraryDetail({
         return s1;
       }, [] as ReactNode[])} */}
       {data.segments.map((s, ix) => (
-        <>
+        <Fragment key={s.id}>
           <FlightSegment
             key={s.id}
             dictionaries={dictionaries}
@@ -37,7 +38,7 @@ export function FlightItineraryDetail({
           {data.segments[ix + 1] && (
             <SegmentLayover start={s} end={data.segments[ix + 1]} />
           )}
-        </>
+        </Fragment>
       ))}
     </div>
   );

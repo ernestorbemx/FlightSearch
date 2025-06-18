@@ -6,10 +6,13 @@ import { FlightSearch } from "./views/FlightSearch";
 import { FlightDetail } from "./views/FlightDetail";
 import { FlightOffers } from "./views/FlightOffers";
 import { AppLayout } from "./components/AppLayout";
+import { ErrorBoundary } from "./components/errors/ErrorBoundary";
+import { HeroUIProvider, ToastProvider } from "@heroui/react";
 
 const router = createBrowserRouter([
   {
     Component: AppLayout,
+    ErrorBoundary: ErrorBoundary,
     children: [
       {
         path: "/",
@@ -30,6 +33,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <HeroUIProvider>
+      <ToastProvider />
+      <RouterProvider router={router}></RouterProvider>
+    </HeroUIProvider>
   </StrictMode>,
 );

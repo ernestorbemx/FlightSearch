@@ -18,7 +18,7 @@ export function FlightOfferDetail({ data, dictionaries }: Props) {
   return (
     <div className="flex flex-wrap gap-8">
       <div className="flex-1">
-        <Tabs aria-label="itineraries">
+        <Tabs aria-label="itineraries" color="primary">
           {/* If is round trip */}
           {data.itineraries.map((i, index) => (
             <Tab

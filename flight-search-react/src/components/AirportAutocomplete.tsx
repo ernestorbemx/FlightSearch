@@ -3,6 +3,7 @@ import { useAsyncList } from "@react-stately/data";
 import type { Airport } from "../types";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
+import { addToast } from "@heroui/react";
 
 export interface AirportAutoCompleteProps {
   label: string;
@@ -36,15 +37,26 @@ export function AirportAutoComplete({
         };
       }
 
-      const res = await fetch(
-        `http://127.0.0.1:8080/airports?keyword=${filterText}&subtype=AIRPORT&pageSize=10&offset=0`,
-        { signal },
-      );
-      const json = await res.json();
+      try {
+        const res = await fetch(
+          `http://127.0.0.1:8080/airports?keyword=${filterText}&subtype=AIRPORT&pageSize=10&offset=0`,
+          { signal },
+        );
+        const json = await res.json();
 
-      return {
-        items: json as Airport[],
-      };
+        return {
+          items: json as Airport[],
+        };
+      } catch (e) {
+        addToast({
+          title: "Error while searching for airport",
+          description: `Error: ${e}`,
+          color: "danger",
+        });
+        return {
+          items: [],
+        };
+      }
     },
   });
 
