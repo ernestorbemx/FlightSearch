@@ -45,7 +45,7 @@ export function FlightSegment({
         .catch((e) => {
           if (isAxiosError(e)) {
             addToast({
-              title: `Error while searching airport ${segment.arrival.iataCode}`,
+              title: `Error while searching airport ${segment.departure.iataCode}`,
               description: `Error: ${e}`,
               color: "danger",
             });

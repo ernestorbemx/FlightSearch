@@ -135,7 +135,7 @@ export function FlightOffers() {
                   } else {
                     setError(
                       Object.entries(data.errors as Record<string, string>)
-                        .map(([k, v]) => `${v}`)
+                        .map(([, v]) => `${v}`)
                         .join(", "),
                     );
                   }
