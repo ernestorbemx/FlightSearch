@@ -1,0 +1,21 @@
+meta {
+  name: Get flights
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:8080/flights?departureAirport=MEX&arrivalAirport=LAX&departureDate=2025-06-06&returnDate=2025-06-10&currency=MXN&numberAdults=11&nonStop=false
+  body: none
+  auth: inherit
+}
+
+params:query {
+  departureAirport: MEX
+  arrivalAirport: LAX
+  departureDate: 2025-06-06
+  returnDate: 2025-06-10
+  currency: MXN
+  numberAdults: 11
+  nonStop: false
+}
