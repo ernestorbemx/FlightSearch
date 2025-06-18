@@ -91,7 +91,7 @@ export function FlightSegment({
             </Skeleton>
           )}
           {!loading && (
-            <div className="text-primary-800">
+            <div className="text-primary-800 flex items-center">
               <span>
                 {departure
                   ? `${departure?.name} (${segment.departure.iataCode})`
@@ -130,16 +130,16 @@ export function FlightSegment({
           ></SegmentStops>
         </div>
         <div className="font-semibold text-primary-800">
-          {dictionaries.carriers[segment.carrierCode]} ({segment.carrierCode}) -
-          Aircraft: {dictionaries.aircraft[segment.aircraft.code]}
-          {segment.operating &&
+          {dictionaries.carriers[segment.carrierCode]} ({segment.carrierCode}){" "}
+          {segment.operating?.carrierCode &&
             segment.carrierCode != segment.operating.carrierCode && (
               <span>
                 Operated by:{" "}
                 {dictionaries.carriers[segment.operating.carrierCode]} (
                 {segment.operating.carrierCode})
               </span>
-            )}
+            )}{" "}
+          - Aircraft: {dictionaries.aircraft[segment.aircraft.code]}
         </div>
         <div className="border p-2 rounded-lg">
           <h3 className="text-lg font-semibold text-primary-800">

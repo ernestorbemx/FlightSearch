@@ -125,7 +125,7 @@ export function FlightItinerary({ data, dictionaries, showCarrier }: Props) {
       </div>
 
       {showCarrier && (
-        <div className="my-2 font-mono">
+        <div className="my-2 font-mono text-primary-800 font-semibold">
           {Object.entries(dictionaries.carriers)
             .filter(([key]) => carriers.has(key))
             .map(([key, name]) => `${name} (${key})`)

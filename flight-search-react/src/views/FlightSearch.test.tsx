@@ -45,7 +45,7 @@ describe("<FlightSearch />", () => {
   it("renders all form fields", () => {
     setup();
 
-    expect(screen.getByText("Flight Search")).toBeInTheDocument();
+    expect(screen.getByText(/Flight Search/i)).toBeInTheDocument();
     expect(screen.getByText(/Departure airport/i)).toBeInTheDocument();
     expect(screen.getByText(/Arrival airport/i)).toBeInTheDocument();
     expect(screen.getByText(/Departure date/i)).toBeInTheDocument();

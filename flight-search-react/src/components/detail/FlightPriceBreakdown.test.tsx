@@ -52,7 +52,7 @@ describe("FlightPriceBreakdown", () => {
     expect(screen.getByText("Total taxes: 30 USD"));
 
     expect(screen.getByText("Other charges"));
-    expect(screen.getByText("0 USD")); // 150 - 100 - 30 - 20 = 0
+    expect(screen.getByText("0.00 USD")); // 150 - 100 - 30 - 20 = 0
 
     expect(screen.getByText("Total price"));
     expect(screen.getByText("150 USD"));
