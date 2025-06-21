@@ -4,9 +4,11 @@ This project leverages Amadeus REST API into a fully usable web application
 for searching flight offers given a set of parameters. It is composed of two
 projects, a [Spring Boot application](/flight-search/) as a lightweight wrapper on Amadeus API and a [frontend application](/flight-search-react/) built with React
 
+For specific documentation regarding both subprojects, read the corresponding README.
+
 ## Running both apps using Docker
 
-If you plan to run this application with the minimum setup required you must:
+To run the application with the minimium setup required you should follow the following:
 
 ### Prerequisites
 
